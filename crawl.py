@@ -4,12 +4,14 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.by import By
 import time
-
+CONDITION = True
 def run():
     links_df = pd.read_csv('orgs_with_links.csv')
     scraped_data = pd.read_csv('organizations.csv')
     links_df = links_df[links_df['link'].apply(lambda l: str(l) not in list(scraped_data['link']))]
-
+    if len(links_df)==0:
+        CONDITION = False
+        raise Exception(" we are done")
     for idx, partner_type, link in links_df.to_records():
         print(idx, link)
         driver_obj = MakeDriver(link)
@@ -35,8 +37,8 @@ def run():
             f.write(f"""{organization_name},{organization_headquarters},{organization_site},{organization_description},{link},{partner_type}\n""")
 
 if __name__=='__main__':
-    condition = True
-    while condition:
+    
+    while CONDITION:
         try:
             run()
         except:
@@ -47,3 +49,4 @@ if __name__=='__main__':
             except:
                 print('connection stopped twice let sleep for ten minutes')
                 time.sleep(600)
+
