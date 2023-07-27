@@ -18,35 +18,48 @@ def run():
         driver_obj.create_driver()
 
         org_name_xpath = '//h1[@class="organization__name"]'
-        WebDriverWait(driver_obj.website_driver, 5).until(
+        WebDriverWait(driver_obj.website_driver, 10).until(
             EC.presence_of_element_located((By.XPATH, org_name_xpath))
         )
 
-        organization_name = driver_obj.website_driver.find_element(By.XPATH, org_name_xpath).text
+        organization_name = driver_obj.website_driver.find_element(By.XPATH, org_name_xpath).text.replace('\n', '').replace(',', ' ').replace("'", "")
 
-        org_desc_xpath = '//div[@class="organization__description"]/p'
-        organization_description = driver_obj.website_driver.find_element(By.XPATH, org_desc_xpath).text.replace('\n', '').replace(',', ' ').replace("'", "")
+        try:
+            org_desc_xpath = '//div[@class="organization__description"]/p'
+            organization_description = driver_obj.website_driver.find_element(By.XPATH, org_desc_xpath).text.replace('\n', '').replace(',', ' ').replace("'", "")
+        except:
+            organization_description = ''
 
-        org_hq_xpath = '//dl[@class="column organization__profile__stats"]/dd'
-        organization_headquarters = driver_obj.website_driver.find_element(By.XPATH, org_hq_xpath).text
+        try:
+            org_hq_xpath = '//dl[@class="column organization__profile__stats"]/dd'
+            organization_headquarters = driver_obj.website_driver.find_element(By.XPATH, org_hq_xpath).text.replace('\n', '').replace(',', ' ').replace("'", "")
+        except:
+            org_hq_xpath = ''
 
-        org_site_xpath = '//a[@class="organization__website--dark"]'
-        organization_site = driver_obj.website_driver.find_element(By.XPATH, org_site_xpath).get_attribute('href')
+        try:
+            org_site_xpath = '//a[@class="organization__website--dark"]'
+            organization_site = driver_obj.website_driver.find_element(By.XPATH, org_site_xpath).get_attribute('href').replace('\n', '').replace(',', ' ').replace("'", "")
+        except:
+            organization_site = ''
 
         with open('organizations.csv', 'a') as f:
             f.write(f"""{organization_name},{organization_headquarters},{organization_site},{organization_description},{link},{partner_type}\n""")
+        
+        driver_obj.destroy_driver()
 
 if __name__=='__main__':
     
     while CONDITION:
         try:
             run()
-        except:
+        except Exception as e:
+            print(e)
             print('connection stopped let sleep for a minute')
             time.sleep(60)
             try:
                 run()
-            except:
+            except Exception as e:
+                print(e)
                 print('connection stopped twice let sleep for ten minutes')
                 time.sleep(600)
 
