@@ -3,7 +3,7 @@ import time
 
 
 if __name__=='__main__':
-    # comment
+
     crawler = Crawler()
     crawler.fetch_urls()
     CONDITION = crawler.CONDITION

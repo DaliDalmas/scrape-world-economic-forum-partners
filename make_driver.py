@@ -4,16 +4,11 @@ from webdriver_manager.chrome import ChromeDriverManager
 from selenium.webdriver.chrome.options import Options
 
 class MakeDriver:
-    """
-    
-    """
+
     def __init__(self, url: str) -> None:
         self.website = url
 
     def create_driver(self) -> None:
-        """
-        
-        """
         options = Options()
         options.add_argument("--window-size=1920,1080")
         options.add_argument("--headless")
@@ -30,7 +25,5 @@ class MakeDriver:
         self.website_driver.get(self.website)
 
     def destroy_driver(self) -> None:
-        """
-        
-        """
+
         self.website_driver.quit()

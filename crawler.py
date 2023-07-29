@@ -12,17 +12,13 @@ logging.basicConfig(level = logging.INFO)
 
 
 class Crawler:
-    """
-    
-    """
+
     def __init__(self) -> None:
         self.CONDITION = True
 
 
     def fetch_urls(self):
-        """
-        
-        """
+
         driver_obj = MakeDriver(website)
         driver_obj.create_driver()
         logging.info(f"{datetime.now()}: Driver created.")
@@ -64,9 +60,6 @@ class Crawler:
             return ''
 
     def fetch_data(self):
-        """
-        
-        """
 
         links_df = pd.read_csv(links_file)
         scraped_data = pd.read_csv(organization_file)
